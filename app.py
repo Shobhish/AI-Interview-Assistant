@@ -12,8 +12,18 @@ from google.genai import types
 from gtts import gTTS
 
 load_dotenv()
+def get_api_key():
+    key = os.getenv("GEMINI_API_KEY")
+    if key:
+        return key
+    try:
+        return st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        return None
+
+
 client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY"),
+    api_key=get_api_key(),
     http_options=types.HttpOptions(timeout=30000),
 )
 MODELS = ["gemini-3.1-flash-lite", "gemini-3.5-flash"]  # main model, then backup
